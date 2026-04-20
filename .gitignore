@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Expo
+.expo/
+dist/
+web-build/
+# If using EAS for builds/credentials
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Native directories (Managed Workflow)
+# These are generated during 'npx expo prebuild' and usually shouldn't be committed
+# unless you have moved to a Bare Workflow.
+ios/
+android/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Logs
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# IDEs & System files
+.vscode/
+.idea/
+.DS_Store
+*.orig.*
