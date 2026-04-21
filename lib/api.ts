@@ -143,4 +143,104 @@ export async function bookTutor(
   return res.data as { url: string };
 }
 
+// ─── Parent API ───────────────────────────────────────────────────────────────
+
+export async function getParentStatus() {
+  const res = await api.get("/parent/status");
+  return res.data as { isSubscribed: boolean };
+}
+
+export async function getParentStats() {
+  const res = await api.get("/parent/stats");
+  return res.data;
+}
+
+export async function getParentStudents() {
+  const res = await api.get("/parent/students");
+  return res.data;
+}
+
+export async function getParentHistory() {
+  const res = await api.get("/parent/history");
+  return res.data;
+}
+
+export async function findParentTutors(params: Record<string, string>) {
+  const res = await api.get("/parent/tutors", { params });
+  return res.data;
+}
+
+export async function getParentTutorProfile(tutorId: string) {
+  const res = await api.get(`/parent/tutors/${tutorId}`);
+  return res.data;
+}
+
+export async function getParentTutorAvailabilities(tutorId: string) {
+  const res = await api.get(`/parent/tutors/${tutorId}/availabilities`);
+  return res.data;
+}
+
+export async function bookTutorForStudent(
+  tutorId: string,
+  data: {
+    studentId: string;
+    availabilityId: string;
+    duration: number;
+    location: string;
+    title: string;
+    selectedInPersonLocation?: string;
+  },
+) {
+  const res = await api.post(`/parent/tutors/${tutorId}/book`, data);
+  return res.data as { url: string };
+}
+
+export async function bookMultipleTutorForStudent(
+  tutorId: string,
+  studentId: string,
+  availabilities: {
+    id: string;
+    title: string;
+    duration: number;
+    location: string;
+    selectedInPersonLocation?: string;
+  }[],
+) {
+  const res = await api.post(`/parent/tutors/${tutorId}/book-multiple`, {
+    studentId,
+    availabilities,
+  });
+  return res.data as { url: string };
+}
+
+export async function getParentSchedules() {
+  const res = await api.get("/parent/schedules");
+  return res.data;
+}
+
+export async function getParentScheduleById(id: string) {
+  const res = await api.get(`/parent/schedules/${id}`);
+  return res.data;
+}
+
+export async function getParentScheduleMessages(scheduleId: string) {
+  const res = await api.get(`/parent/schedules/${scheduleId}/messages`);
+  return res.data;
+}
+
+export async function sendParentScheduleMessage(scheduleId: string, content: string) {
+  const res = await api.post(`/parent/schedules/${scheduleId}/messages`, { content });
+  return res.data;
+}
+
+export async function cancelParentSchedule(scheduleId: string) {
+  const res = await api.post(`/parent/schedules/${scheduleId}/cancel`);
+  return res.data;
+}
+
+export async function requestParentAssistance(scheduleId: string, message: string) {
+  const res = await api.post(`/parent/schedules/${scheduleId}/assistance`, { message });
+  return res.data;
+}
+
 export default api;

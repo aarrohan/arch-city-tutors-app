@@ -23,6 +23,10 @@ export default function DashboardLayout() {
         name="parent-onboarding"
         options={{ headerShown: false, animation: "none" }}
       />
+      <Stack.Screen
+        name="parent-dashboard"
+        options={{ headerShown: false, animation: "none" }}
+      />
     </Stack>
   );
 }

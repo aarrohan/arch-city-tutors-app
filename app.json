@@ -44,15 +44,15 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "71152bc5-95dd-4242-a30b-5f31a36192b6"
+        "projectId": "240f21b7-076a-4a82-a42c-ee8059d4d799"
       }
     },
-    "owner": "blocxperts",
+    "owner": "aarrohan",
     "runtimeVersion": {
       "policy": "appVersion"
     },
     "updates": {
-      "url": "https://u.expo.dev/71152bc5-95dd-4242-a30b-5f31a36192b6"
+      "url": "https://u.expo.dev/240f21b7-076a-4a82-a42c-ee8059d4d799"
     }
   }
 }

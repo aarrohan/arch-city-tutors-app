@@ -2,10 +2,13 @@ import AppText from "@/components/ui/AppText";
 import ProfileHeader from "@/components/ui/ProfileHeader";
 import colors from "@/constants/colors";
 import { images } from "@/constants/images";
+import { getParentStatus } from "@/lib/api";
 import { getRgbValues } from "@/lib/utils";
 import * as Linking from "expo-linking";
 import * as SecureStore from "expo-secure-store";
+import { router } from "expo-router";
 import { Sparkles } from "lucide-react-native";
+import { useCallback, useEffect } from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -14,6 +17,19 @@ import {
 } from "react-native";
 
 export default function ParentHome() {
+  const checkStatus = useCallback(async () => {
+    try {
+      const { isSubscribed } = await getParentStatus();
+      if (isSubscribed) {
+        router.replace("/dashboard/parent-dashboard" as any);
+      }
+    } catch {}
+  }, []);
+
+  useEffect(() => {
+    checkStatus();
+  }, [checkStatus]);
+
   const openPlanPage = async () => {
     const token = await SecureStore.getItemAsync("token");
     const url = `https://app.archcitytutors.com/api/mobile-app/auth/app-redirect?token=${token}&to=/parent-dashboard/plan`;
