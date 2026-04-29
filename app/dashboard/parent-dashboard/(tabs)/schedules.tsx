@@ -14,6 +14,7 @@ import {
   UserIcon,
   VideoIcon,
 } from "lucide-react-native";
+import { useLocalSearchParams } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import {
   ImageBackground,
@@ -89,8 +90,15 @@ function formatDuration(duration: string) {
 }
 
 export default function ParentSchedules() {
+  const { filter: filterParam } = useLocalSearchParams<{ filter?: string }>();
   const [schedules, setSchedules] = useState<Schedule[]>([]);
-  const [filter, setFilter] = useState<FilterTab>("ALL");
+  const [filter, setFilter] = useState<FilterTab>(
+    (filterParam as FilterTab) ?? "ALL"
+  );
+
+  useEffect(() => {
+    if (filterParam) setFilter(filterParam as FilterTab);
+  }, [filterParam]);
   const [refreshing, setRefreshing] = useState(false);
 
   const load = useCallback(async () => {

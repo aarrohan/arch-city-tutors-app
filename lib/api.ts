@@ -160,6 +160,16 @@ export async function getParentStudents() {
   return res.data;
 }
 
+export async function createParentStudent(data: { firstName: string; lastName: string; grade: string }) {
+  const res = await api.post("/parent/students", data);
+  return res.data;
+}
+
+export async function loginAsStudent(studentId: string) {
+  const res = await api.post("/parent/students/login", { studentId });
+  return res.data as { token: string };
+}
+
 export async function getParentHistory() {
   const res = await api.get("/parent/history");
   return res.data;

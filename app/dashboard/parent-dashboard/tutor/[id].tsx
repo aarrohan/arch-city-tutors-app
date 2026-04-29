@@ -135,7 +135,7 @@ function BookingModal({
     if (visible && step === 0) {
       setStudentsLoading(true);
       getParentStudents()
-        .then((data) => setStudents(data ?? []))
+        .then((data) => setStudents(data?.students ?? []))
         .catch(() => setStudents([]))
         .finally(() => setStudentsLoading(false));
     }
@@ -191,7 +191,7 @@ function BookingModal({
             {!booking && <TouchableOpacity onPress={handleClose} style={bStyles.closeBtn}><XIcon size={20} color={colors.primary} /></TouchableOpacity>}
           </View>
 
-          <ScrollView style={{ flex: 1 }} contentContainerStyle={[bStyles.body, { paddingBottom: insets.bottom + 20 }]} showsVerticalScrollIndicator={false}>
+          <ScrollView style={{ flex: 1 }} contentContainerStyle={bStyles.body} showsVerticalScrollIndicator={false}>
             {/* Step 0: Select student */}
             {step === 0 && (
               <View>
@@ -219,17 +219,6 @@ function BookingModal({
                     );
                   })
                 )}
-                <View style={bStyles.btnRow}>
-                  <TouchableOpacity
-                    style={[bStyles.btn, !selectedStudentId && bStyles.btnDisabled]}
-                    onPress={() => { if (selectedStudentId) setStep(1); }}
-                  >
-                    <AppText style={bStyles.btnText}>Next</AppText>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={handleClose}>
-                    <AppText style={bStyles.linkText}>Close</AppText>
-                  </TouchableOpacity>
-                </View>
               </View>
             )}
 
@@ -244,17 +233,6 @@ function BookingModal({
                   placeholder="Algebra Preparation for Midterm"
                   placeholderTextColor={`rgba(${getRgbValues(colors.primary)}, 0.35)`}
                 />
-                <View style={bStyles.btnRow}>
-                  <TouchableOpacity
-                    style={[bStyles.btn, title.length === 0 && bStyles.btnDisabled]}
-                    onPress={() => { if (title.length > 0) { setSelectedAvailabilityId(""); setStep(2); } }}
-                  >
-                    <AppText style={bStyles.btnText}>Next</AppText>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => setStep(0)}>
-                    <AppText style={bStyles.linkText}>Go back</AppText>
-                  </TouchableOpacity>
-                </View>
               </View>
             )}
 
@@ -287,14 +265,6 @@ function BookingModal({
                     );
                   })
                 )}
-                <View style={bStyles.btnRow}>
-                  <TouchableOpacity style={[bStyles.btn, !selectedAvailabilityId && bStyles.btnDisabled]} onPress={() => { if (selectedAvailabilityId) { setSelectedDuration(0); setStep(3); } }}>
-                    <AppText style={bStyles.btnText}>Next</AppText>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => setStep(1)}>
-                    <AppText style={bStyles.linkText}>Go back</AppText>
-                  </TouchableOpacity>
-                </View>
               </View>
             )}
 
@@ -324,14 +294,6 @@ function BookingModal({
                     </View>
                   );
                 })}
-                <View style={bStyles.btnRow}>
-                  <TouchableOpacity style={[bStyles.btn, selectedDuration === 0 && bStyles.btnDisabled]} onPress={() => { if (selectedDuration !== 0) { setSelectedLocation(""); setStep(4); } }}>
-                    <AppText style={bStyles.btnText}>Next</AppText>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => setStep(2)}>
-                    <AppText style={bStyles.linkText}>Go back</AppText>
-                  </TouchableOpacity>
-                </View>
               </View>
             )}
 
@@ -369,14 +331,6 @@ function BookingModal({
                     )}
                   </>
                 )}
-                <View style={bStyles.btnRow}>
-                  <TouchableOpacity style={[bStyles.btn, selectedLocation === "" && bStyles.btnDisabled]} onPress={() => { if (selectedLocation !== "") setStep(5); }}>
-                    <AppText style={bStyles.btnText}>Next</AppText>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => setStep(3)}>
-                    <AppText style={bStyles.linkText}>Go back</AppText>
-                  </TouchableOpacity>
-                </View>
               </View>
             )}
 
@@ -390,17 +344,61 @@ function BookingModal({
                   <AppText style={bStyles.confirmHighlight}>{selectedDuration} minutes</AppText> which will take place{" "}
                   <AppText style={bStyles.confirmHighlight}>{selectedLocation === "virtual" ? "virtually" : `in-person${selectedInPersonLocation ? ` at ${selectedInPersonLocation}` : ""}`}</AppText>.
                 </AppText>
-                <View style={bStyles.btnRow}>
-                  <TouchableOpacity style={[bStyles.btn, booking && bStyles.btnDisabled]} onPress={handleBook}>
-                    {booking ? <ActivityIndicator color="#fff" size="small" /> : <AppText style={bStyles.btnText}>Confirm & pay $5</AppText>}
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => setStep(4)}>
-                    <AppText style={bStyles.linkText}>Go back</AppText>
-                  </TouchableOpacity>
-                </View>
               </View>
             )}
           </ScrollView>
+
+          {/* Sticky footer */}
+          <View style={[bStyles.footer, { paddingBottom: insets.bottom + 14 }]}>
+            {step === 0 && (
+              <View style={bStyles.btnRow}>
+                <TouchableOpacity style={[bStyles.btn, !selectedStudentId && bStyles.btnDisabled]} onPress={() => { if (selectedStudentId) setStep(1); }}>
+                  <AppText style={bStyles.btnText}>Next</AppText>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleClose}><AppText style={bStyles.linkText}>Close</AppText></TouchableOpacity>
+              </View>
+            )}
+            {step === 1 && (
+              <View style={bStyles.btnRow}>
+                <TouchableOpacity style={[bStyles.btn, title.length === 0 && bStyles.btnDisabled]} onPress={() => { if (title.length > 0) { setSelectedAvailabilityId(""); setStep(2); } }}>
+                  <AppText style={bStyles.btnText}>Next</AppText>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setStep(0)}><AppText style={bStyles.linkText}>Go back</AppText></TouchableOpacity>
+              </View>
+            )}
+            {step === 2 && (
+              <View style={bStyles.btnRow}>
+                <TouchableOpacity style={[bStyles.btn, !selectedAvailabilityId && bStyles.btnDisabled]} onPress={() => { if (selectedAvailabilityId) { setSelectedDuration(0); setStep(3); } }}>
+                  <AppText style={bStyles.btnText}>Next</AppText>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setStep(1)}><AppText style={bStyles.linkText}>Go back</AppText></TouchableOpacity>
+              </View>
+            )}
+            {step === 3 && (
+              <View style={bStyles.btnRow}>
+                <TouchableOpacity style={[bStyles.btn, selectedDuration === 0 && bStyles.btnDisabled]} onPress={() => { if (selectedDuration !== 0) { setSelectedLocation(""); setStep(4); } }}>
+                  <AppText style={bStyles.btnText}>Next</AppText>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setStep(2)}><AppText style={bStyles.linkText}>Go back</AppText></TouchableOpacity>
+              </View>
+            )}
+            {step === 4 && (
+              <View style={bStyles.btnRow}>
+                <TouchableOpacity style={[bStyles.btn, selectedLocation === "" && bStyles.btnDisabled]} onPress={() => { if (selectedLocation !== "") setStep(5); }}>
+                  <AppText style={bStyles.btnText}>Next</AppText>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setStep(3)}><AppText style={bStyles.linkText}>Go back</AppText></TouchableOpacity>
+              </View>
+            )}
+            {step === 5 && (
+              <View style={bStyles.btnRow}>
+                <TouchableOpacity style={[bStyles.btn, booking && bStyles.btnDisabled]} onPress={handleBook}>
+                  {booking ? <ActivityIndicator color="#fff" size="small" /> : <AppText style={bStyles.btnText}>Confirm & pay $5</AppText>}
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setStep(4)}><AppText style={bStyles.linkText}>Go back</AppText></TouchableOpacity>
+              </View>
+            )}
+          </View>
         </View>
       </View>
     </Modal>
@@ -441,7 +439,7 @@ function BookMultipleModal({
     if (visible && step === 0) {
       setStudentsLoading(true);
       getParentStudents()
-        .then((data) => setStudents(data ?? []))
+        .then((data) => setStudents(data?.students ?? []))
         .catch(() => setStudents([]))
         .finally(() => setStudentsLoading(false));
     }
@@ -490,7 +488,7 @@ function BookMultipleModal({
             {!booking && <TouchableOpacity onPress={handleClose} style={bStyles.closeBtn}><XIcon size={20} color={colors.primary} /></TouchableOpacity>}
           </View>
 
-          <ScrollView style={{ flex: 1 }} contentContainerStyle={[bStyles.body, { paddingBottom: insets.bottom + 20 }]} showsVerticalScrollIndicator={false}>
+          <ScrollView style={{ flex: 1 }} contentContainerStyle={bStyles.body} showsVerticalScrollIndicator={false}>
             {/* Step 0: Select student */}
             {step === 0 && (
               <View>
@@ -512,12 +510,6 @@ function BookMultipleModal({
                     );
                   })
                 )}
-                <View style={bStyles.btnRow}>
-                  <TouchableOpacity style={[bStyles.btn, !selectedStudentId && bStyles.btnDisabled]} onPress={() => { if (selectedStudentId) setStep(1); }}>
-                    <AppText style={bStyles.btnText}>Next</AppText>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={handleClose}><AppText style={bStyles.linkText}>Close</AppText></TouchableOpacity>
-                </View>
               </View>
             )}
 
@@ -558,12 +550,6 @@ function BookMultipleModal({
                     );
                   })
                 )}
-                <View style={bStyles.btnRow}>
-                  <TouchableOpacity style={[bStyles.btn, selected.length < 2 && bStyles.btnDisabled]} onPress={() => { if (selected.length >= 2) setStep(2); }}>
-                    <AppText style={bStyles.btnText}>Next</AppText>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => setStep(0)}><AppText style={bStyles.linkText}>Go back</AppText></TouchableOpacity>
-                </View>
               </View>
             )}
 
@@ -624,15 +610,37 @@ function BookMultipleModal({
                     )}
                   </View>
                 ))}
-                <View style={bStyles.btnRow}>
-                  <TouchableOpacity style={[bStyles.btn, (!allConfigured || booking) && bStyles.btnDisabled]} onPress={handleBook}>
-                    {booking ? <ActivityIndicator color="#fff" size="small" /> : <AppText style={bStyles.btnText}>Confirm & pay ${selected.length * 5}</AppText>}
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => setStep(1)}><AppText style={bStyles.linkText}>Go back</AppText></TouchableOpacity>
-                </View>
               </View>
             )}
           </ScrollView>
+
+          {/* Sticky footer */}
+          <View style={[bStyles.footer, { paddingBottom: insets.bottom + 14 }]}>
+            {step === 0 && (
+              <View style={bStyles.btnRow}>
+                <TouchableOpacity style={[bStyles.btn, !selectedStudentId && bStyles.btnDisabled]} onPress={() => { if (selectedStudentId) setStep(1); }}>
+                  <AppText style={bStyles.btnText}>Next</AppText>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleClose}><AppText style={bStyles.linkText}>Close</AppText></TouchableOpacity>
+              </View>
+            )}
+            {step === 1 && (
+              <View style={bStyles.btnRow}>
+                <TouchableOpacity style={[bStyles.btn, selected.length < 2 && bStyles.btnDisabled]} onPress={() => { if (selected.length >= 2) setStep(2); }}>
+                  <AppText style={bStyles.btnText}>Next</AppText>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setStep(0)}><AppText style={bStyles.linkText}>Go back</AppText></TouchableOpacity>
+              </View>
+            )}
+            {step === 2 && (
+              <View style={bStyles.btnRow}>
+                <TouchableOpacity style={[bStyles.btn, (!allConfigured || booking) && bStyles.btnDisabled]} onPress={handleBook}>
+                  {booking ? <ActivityIndicator color="#fff" size="small" /> : <AppText style={bStyles.btnText}>Confirm & pay ${selected.length * 5}</AppText>}
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setStep(1)}><AppText style={bStyles.linkText}>Go back</AppText></TouchableOpacity>
+              </View>
+            )}
+          </View>
         </View>
       </View>
     </Modal>
@@ -1014,6 +1022,13 @@ const bStyles = StyleSheet.create({
   locationSubItemText: { fontSize: 13, fontWeight: "500", color: colors.primary },
   confirmText: { fontSize: 14, lineHeight: 22, color: `rgba(${getRgbValues(colors.primary)}, 0.75)` },
   confirmHighlight: { fontWeight: "700", color: colors.accent },
+  footer: {
+    paddingHorizontal: 20,
+    paddingTop: 14,
+    borderTopWidth: 1,
+    borderTopColor: `rgba(${getRgbValues(colors.primary)}, 0.08)`,
+    backgroundColor: colors.secondary,
+  },
 });
 
 const mStyles = StyleSheet.create({

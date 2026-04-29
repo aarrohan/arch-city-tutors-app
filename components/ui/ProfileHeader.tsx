@@ -4,10 +4,10 @@ import { getSelfProfile } from "@/lib/api";
 import { getRgbValues } from "@/lib/utils";
 import { router } from "expo-router";
 import * as SecureStore from "expo-secure-store";
-import { LogOut } from "lucide-react-native";
+import { LogOut, Undo2Icon } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import AppText from "./AppText";
+import AppText from "@/components/ui/AppText";
 
 interface ISelfProfile {
   type: string;
@@ -19,17 +19,23 @@ interface ISelfProfile {
 
 export default function ProfileHeader({ from }: { from: string }) {
   const [profile, setProfile] = useState<ISelfProfile | null>(null);
+  const [hasParentToken, setHasParentToken] = useState(false);
 
   useEffect(() => {
     const loadProfile = async () => {
       try {
         const user = await getSelfProfile();
-
         setProfile(user);
       } catch {}
     };
 
+    const checkParentToken = async () => {
+      const t = await SecureStore.getItemAsync("parentToken");
+      setHasParentToken(!!t);
+    };
+
     loadProfile();
+    checkParentToken();
   }, []);
 
   return (
@@ -43,16 +49,33 @@ export default function ProfileHeader({ from }: { from: string }) {
           isOnline
         />
 
-        <TouchableOpacity
-          activeOpacity={0.5}
-          onPress={async () => {
-            await SecureStore.deleteItemAsync("token");
-
-            router.replace("/");
-          }}
-        >
-          <LogOut size={22} color={colors.secondary} />
-        </TouchableOpacity>
+        <View style={styles.headerActions}>
+          {hasParentToken && (
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={styles.switchBackBtn}
+              onPress={async () => {
+                const parentToken = await SecureStore.getItemAsync("parentToken");
+                await SecureStore.setItemAsync("token", parentToken ?? "");
+                await SecureStore.deleteItemAsync("parentToken");
+                router.replace("/dashboard/parent-dashboard" as any);
+              }}
+            >
+              <Undo2Icon size={14} color={colors.secondary} />
+              <AppText style={styles.switchBackText}>Switch back</AppText>
+            </TouchableOpacity>
+          )}
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={async () => {
+              await SecureStore.deleteItemAsync("token");
+              await SecureStore.deleteItemAsync("parentToken");
+              router.replace("/");
+            }}
+          >
+            <LogOut size={22} color={colors.secondary} />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <AppText style={styles.name}>
@@ -75,6 +98,25 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+  },
+  headerActions: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  switchBackBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+    backgroundColor: "rgba(255,255,255,0.15)",
+    paddingVertical: 6,
+    paddingHorizontal: 11,
+    borderRadius: 10,
+  },
+  switchBackText: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: colors.secondary,
   },
   name: {
     marginBottom: 4,

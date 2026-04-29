@@ -8,14 +8,17 @@ import {
   CalendarCheckIcon,
   CalendarDaysIcon,
   CalendarXIcon,
+  SearchIcon,
   UsersIcon,
 } from "lucide-react-native";
+import { router } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import {
   ImageBackground,
   RefreshControl,
   ScrollView,
   StyleSheet,
+  TouchableOpacity,
   View,
 } from "react-native";
 
@@ -32,11 +35,12 @@ interface StatCardProps {
   iconBg: string;
   label: string;
   value: string;
+  onPress?: () => void;
 }
 
-function StatCard({ icon, iconBg, label, value }: StatCardProps) {
+function StatCard({ icon, iconBg, label, value, onPress }: StatCardProps) {
   return (
-    <View style={styles.card}>
+    <TouchableOpacity activeOpacity={0.75} style={styles.card} onPress={onPress} disabled={!onPress}>
       <View style={[styles.cardIconWrapper, { backgroundColor: iconBg }]}>
         {icon}
       </View>
@@ -44,7 +48,7 @@ function StatCard({ icon, iconBg, label, value }: StatCardProps) {
         <AppText style={styles.cardValue}>{value}</AppText>
         <AppText style={styles.cardLabel}>{label}</AppText>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -92,12 +96,14 @@ export default function ParentDashboardHome() {
               iconBg={colors.primary}
               label="Total Sessions"
               value={fmt(stats?.totalSessions ?? 0)}
+              onPress={() => router.push("/dashboard/parent-dashboard/schedules?filter=ALL" as any)}
             />
             <StatCard
               icon={<UsersIcon size={18} color={colors.secondary} />}
               iconBg="#7c3aed"
               label="Students"
               value={fmt(stats?.studentCount ?? 0)}
+              onPress={() => router.push("/dashboard/parent-dashboard/students" as any)}
             />
           </View>
 
@@ -107,12 +113,14 @@ export default function ParentDashboardHome() {
               iconBg="#f97316"
               label="Upcoming"
               value={fmt(stats?.upcomingSessions ?? 0)}
+              onPress={() => router.push("/dashboard/parent-dashboard/schedules?filter=ACTIVE" as any)}
             />
             <StatCard
               icon={<CalendarCheckIcon size={18} color={colors.secondary} />}
               iconBg={colors.success}
               label="Completed"
               value={fmt(stats?.completedSessions ?? 0)}
+              onPress={() => router.push("/dashboard/parent-dashboard/schedules?filter=COMPLETED" as any)}
             />
           </View>
 
@@ -122,8 +130,18 @@ export default function ParentDashboardHome() {
               iconBg={colors.accent}
               label="Canceled"
               value={fmt(stats?.canceledSessions ?? 0)}
+              onPress={() => router.push("/dashboard/parent-dashboard/schedules?filter=CANCELED" as any)}
             />
-            <View style={{ flex: 1 }} />
+            <View
+              style={{
+                flex: 1,
+                backgroundColor: colors.secondary,
+                borderRadius: 25,
+                padding: 25,
+                gap: 15,
+                opacity: 0,
+              }}
+            ></View>
           </View>
         </ScrollView>
       </ImageBackground>
