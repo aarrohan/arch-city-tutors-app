@@ -22,7 +22,6 @@ import {
   MapPinIcon,
   MonitorIcon,
   SchoolIcon,
-  UserIcon,
   UsersRoundIcon,
   XIcon,
 } from "lucide-react-native";
@@ -338,10 +337,9 @@ function BookingModal({
             {step === 5 && (
               <View>
                 <AppText style={bStyles.confirmText}>
-                  You are almost there! Please review the details before proceeding. To confirm the booking you need to pay{" "}
-                  <AppText style={bStyles.confirmHighlight}>$5 non-refundable</AppText> scheduling fee. When the session is completed, you need to pay{" "}
-                  <AppText style={bStyles.confirmHighlight}>${sessionRate()}</AppText> to the tutor for{" "}
-                  <AppText style={bStyles.confirmHighlight}>{selectedDuration} minutes</AppText> which will take place{" "}
+                  You are almost there! Please review your session details below. Tutor rate:{" "}
+                  <AppText style={bStyles.confirmHighlight}>${sessionRate()}</AppText> for{" "}
+                  <AppText style={bStyles.confirmHighlight}>{selectedDuration} minutes</AppText>, taking place{" "}
                   <AppText style={bStyles.confirmHighlight}>{selectedLocation === "virtual" ? "virtually" : `in-person${selectedInPersonLocation ? ` at ${selectedInPersonLocation}` : ""}`}</AppText>.
                 </AppText>
               </View>
@@ -393,7 +391,7 @@ function BookingModal({
             {step === 5 && (
               <View style={bStyles.btnRow}>
                 <TouchableOpacity style={[bStyles.btn, booking && bStyles.btnDisabled]} onPress={handleBook}>
-                  {booking ? <ActivityIndicator color="#fff" size="small" /> : <AppText style={bStyles.btnText}>Confirm & pay $5</AppText>}
+                  {booking ? <ActivityIndicator color="#fff" size="small" /> : <AppText style={bStyles.btnText}>Confirm</AppText>}
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => setStep(4)}><AppText style={bStyles.linkText}>Go back</AppText></TouchableOpacity>
               </View>
@@ -635,7 +633,7 @@ function BookMultipleModal({
             {step === 2 && (
               <View style={bStyles.btnRow}>
                 <TouchableOpacity style={[bStyles.btn, (!allConfigured || booking) && bStyles.btnDisabled]} onPress={handleBook}>
-                  {booking ? <ActivityIndicator color="#fff" size="small" /> : <AppText style={bStyles.btnText}>Confirm & pay ${selected.length * 5}</AppText>}
+                  {booking ? <ActivityIndicator color="#fff" size="small" /> : <AppText style={bStyles.btnText}>Confirm</AppText>}
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => setStep(1)}><AppText style={bStyles.linkText}>Go back</AppText></TouchableOpacity>
               </View>

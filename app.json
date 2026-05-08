@@ -9,8 +9,9 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
+      "ascAppId": "6766080587",
       "supportsTablet": true,
-      "bundleIdentifier": "com.aarrohan.archcitytutors",
+      "bundleIdentifier": "com.archcitytutors.app",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }

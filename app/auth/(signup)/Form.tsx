@@ -336,7 +336,7 @@ export default function Form() {
             <Input
               value={phone}
               onChangeText={setPhone}
-              placeholder="Phone number"
+              placeholder="Phone number (optional)"
               icon={<Phone size={18} color={colors.primaryLight} />}
               keyboardType="phone-pad"
             />
@@ -556,7 +556,6 @@ export default function Form() {
                 !firstName ||
                 !lastName ||
                 !email ||
-                !phone ||
                 !password ||
                 !cPassword
               ) {

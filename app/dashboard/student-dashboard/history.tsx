@@ -62,7 +62,7 @@ export default function StudentHistory() {
         >
           <ArrowLeftIcon size={20} color={colors.primary} />
         </TouchableOpacity>
-        <AppText style={styles.headerTitle}>Payment history</AppText>
+        <AppText style={styles.headerTitle}>Booking history</AppText>
         <View style={{ width: 40 }} />
       </View>
 
@@ -81,7 +81,7 @@ export default function StudentHistory() {
             </View>
             <AppText style={styles.emptyTitle}>No history yet</AppText>
             <AppText style={styles.emptyDesc}>
-              Your payment history will appear here.
+              Your booking history will appear here.
             </AppText>
           </View>
         ) : (

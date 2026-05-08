@@ -6,19 +6,18 @@ import { getRgbValues } from "@/lib/utils";
 import * as Linking from "expo-linking";
 import * as SecureStore from "expo-secure-store";
 import { router } from "expo-router";
-import { ChevronRightIcon, ClockIcon, CreditCardIcon, UserIcon } from "lucide-react-native";
-import { ImageBackground, StyleSheet, TouchableOpacity, View } from "react-native";
+import { ChevronRightIcon, ClockIcon, UserIcon } from "lucide-react-native";
+import {
+  ImageBackground,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function StudentProfile() {
   const openProfile = async () => {
     const token = await SecureStore.getItemAsync("token");
     const url = `https://app.archcitytutors.com/api/mobile-app/auth/app-redirect?token=${token}&to=/student-dashboard/profile`;
-    Linking.openURL(url);
-  };
-
-  const openPlan = async () => {
-    const token = await SecureStore.getItemAsync("token");
-    const url = `https://app.archcitytutors.com/api/mobile-app/auth/app-redirect?token=${token}&to=/student-dashboard/plan`;
     Linking.openURL(url);
   };
 
@@ -29,17 +28,31 @@ export default function StudentProfile() {
 
         <View style={styles.contentBox}>
           <View style={styles.list}>
-            <TouchableOpacity activeOpacity={0.7} style={styles.row} onPress={openProfile}>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={styles.row}
+              onPress={openProfile}
+            >
               <View style={styles.rowLeft}>
-                <View style={[styles.iconWrapper, { backgroundColor: `rgba(${getRgbValues(colors.accent)}, 0.08)` }]}>
+                <View
+                  style={[
+                    styles.iconWrapper,
+                    {
+                      backgroundColor: `rgba(${getRgbValues(colors.accent)}, 0.08)`,
+                    },
+                  ]}
+                >
                   <UserIcon size={18} color={colors.accent} />
                 </View>
                 <AppText style={styles.rowLabel}>Manage Profile</AppText>
               </View>
-              <ChevronRightIcon size={18} color={`rgba(${getRgbValues(colors.primary)}, 0.3)`} />
+              <ChevronRightIcon
+                size={18}
+                color={`rgba(${getRgbValues(colors.primary)}, 0.3)`}
+              />
             </TouchableOpacity>
 
-            <View style={styles.divider} />
+            {/* <View style={styles.divider} />
 
             <TouchableOpacity
               activeOpacity={0.7}
@@ -50,22 +63,10 @@ export default function StudentProfile() {
                 <View style={[styles.iconWrapper, { backgroundColor: `rgba(${getRgbValues(colors.accent)}, 0.08)` }]}>
                   <ClockIcon size={18} color={colors.accent} />
                 </View>
-                <AppText style={styles.rowLabel}>Payment History</AppText>
+                <AppText style={styles.rowLabel}>Booking History</AppText>
               </View>
               <ChevronRightIcon size={18} color={`rgba(${getRgbValues(colors.primary)}, 0.3)`} />
-            </TouchableOpacity>
-
-            <View style={styles.divider} />
-
-            <TouchableOpacity activeOpacity={0.7} style={styles.row} onPress={openPlan}>
-              <View style={styles.rowLeft}>
-                <View style={[styles.iconWrapper, { backgroundColor: `rgba(${getRgbValues(colors.accent)}, 0.08)` }]}>
-                  <CreditCardIcon size={18} color={colors.accent} />
-                </View>
-                <AppText style={styles.rowLabel}>Manage Plan</AppText>
-              </View>
-              <ChevronRightIcon size={18} color={`rgba(${getRgbValues(colors.primary)}, 0.3)`} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
       </ImageBackground>

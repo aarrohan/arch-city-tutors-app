@@ -4,15 +4,12 @@ import colors from "@/constants/colors";
 import { images } from "@/constants/images";
 import { getParentStatus } from "@/lib/api";
 import { getRgbValues } from "@/lib/utils";
-import * as Linking from "expo-linking";
-import * as SecureStore from "expo-secure-store";
 import { router } from "expo-router";
 import { Sparkles } from "lucide-react-native";
 import { useCallback, useEffect } from "react";
 import {
   ImageBackground,
   StyleSheet,
-  TouchableOpacity,
   View,
 } from "react-native";
 
@@ -30,12 +27,6 @@ export default function ParentHome() {
     checkStatus();
   }, [checkStatus]);
 
-  const openPlanPage = async () => {
-    const token = await SecureStore.getItemAsync("token");
-    const url = `https://app.archcitytutors.com/api/mobile-app/auth/app-redirect?token=${token}&to=/parent-dashboard/plan`;
-    Linking.openURL(url);
-  };
-
   return (
     <View style={styles.main}>
       <ImageBackground source={images.screenBG1} style={styles.imgBg}>
@@ -50,17 +41,15 @@ export default function ParentHome() {
             <AppText style={styles.cardTitle}>Unlock All Features</AppText>
 
             <AppText style={styles.cardDesc}>
-              You need to subscribe to the pro plan in order to access all the
-              features, including booking tutors, viewing schedules, and more.
+              You need a subscription to access all features, including booking
+              tutors, viewing schedules, and more.
             </AppText>
 
-            <TouchableOpacity
-              activeOpacity={0.85}
-              style={styles.btn}
-              onPress={openPlanPage}
-            >
-              <AppText style={styles.btnText}>Get access</AppText>
-            </TouchableOpacity>
+            <AppText style={styles.webNote}>
+              To activate your account, visit{"\n"}
+              <AppText style={styles.webUrl}>archcitytutors.com</AppText>
+              {"\n"}on a web browser.
+            </AppText>
           </View>
         </View>
       </ImageBackground>
@@ -122,16 +111,15 @@ const styles = StyleSheet.create({
     color: `rgba(${getRgbValues(colors.primary)}, 0.55)`,
     marginBottom: 24,
   },
-  btn: {
-    width: "100%",
-    paddingVertical: 14,
-    backgroundColor: colors.accent,
-    borderRadius: 14,
-    alignItems: "center",
+  webNote: {
+    fontSize: 14,
+    lineHeight: 22,
+    textAlign: "center",
+    color: `rgba(${getRgbValues(colors.primary)}, 0.55)`,
   },
-  btnText: {
+  webUrl: {
     fontSize: 15,
-    fontWeight: "600",
-    color: colors.secondary,
+    fontWeight: "700",
+    color: colors.primary,
   },
 });

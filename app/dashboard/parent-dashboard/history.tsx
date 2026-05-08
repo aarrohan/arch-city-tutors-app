@@ -57,7 +57,7 @@ export default function ParentHistory() {
         <TouchableOpacity activeOpacity={0.7} onPress={() => router.back()} style={styles.backBtn}>
           <ArrowLeftIcon size={20} color={colors.primary} />
         </TouchableOpacity>
-        <AppText style={styles.headerTitle}>Payment history</AppText>
+        <AppText style={styles.headerTitle}>Booking history</AppText>
         <View style={{ width: 40 }} />
       </View>
 
@@ -73,7 +73,7 @@ export default function ParentHistory() {
               <ClockIcon size={32} color={colors.accent} />
             </View>
             <AppText style={styles.emptyTitle}>No history yet</AppText>
-            <AppText style={styles.emptyDesc}>Your payment history will appear here.</AppText>
+            <AppText style={styles.emptyDesc}>Your booking history will appear here.</AppText>
           </View>
         ) : (
           <View style={styles.transactionList}>
